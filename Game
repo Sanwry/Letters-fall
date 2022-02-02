@@ -1,0 +1,62 @@
+import pygame
+import random
+
+pygame.init()
+
+background = (0, 0, 0)          # set the baackground color black
+bleu = (30, 30, 255)            # kind of blue
+green = (30, 150, 30)
+
+X = 600
+Y = 400
+Speed = 0.03
+point = 0
+
+def neuWord():
+    global clicked_Word, ChosenWord, Word_X,Word_Y, text, pointCaption, Speed
+    Word_X = random.randint(100, 500)
+    Word_Y = 0
+    Speed += 0.003
+    clicked_Word= ""
+    lines = open ("My words.txt").read().splitlines()
+    ChosenWord = random.choice(lines)
+    text = font.render(ChosenWord, True, green)
+
+
+win = pygame.display.set_mode((X, Y))
+pygame.display.set_caption(("Letter are falling"))
+font = pygame.font.SysFont("Arial", 30)
+
+neuWord()
+
+while True:
+    win.fill(background)
+    Word_Y += Speed
+
+    win.blit(text, (Word_X, Word_Y))
+
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            quit()
+        elif event.type == pygame.KEYDOWN:
+            clicked_Word += pygame.key.name(event.key)
+            if  ChosenWord.startswith(clicked_Word):
+                if ChosenWord == clicked_Word:
+                    point += len(ChosenWord)
+                    neuWord()
+            else:
+                clicked_Word == ""
+    pointCaption = font.render(str(point), True,bleu)
+    win.blit(pointCaption, (10, 5))
+
+    if Word_Y < Y - 5:
+        pygame.display.update()
+    else:
+        event = pygame.event.wait()
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:     # press space to restart
+            Speed = 0.03
+            point = 0
+            neuWord()
+
+root.mainloop()
