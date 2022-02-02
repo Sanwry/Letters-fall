@@ -59,4 +59,4 @@ while True:
             point = 0
             neuWord()
 
-root.mainloop()
+pygame.quit()
